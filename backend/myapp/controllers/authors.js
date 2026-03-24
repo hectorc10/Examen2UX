@@ -1,4 +1,4 @@
-/*const { Authors } = require("../models");
+const { Authors } = require("../models");
 let getAuthors = async (req, res) => {
     try {
 
@@ -32,19 +32,19 @@ let createAuthor = async (req, res) => {
   try {
 
     const author = await Autor.create(req.body);
-    if(request.body.length===undefined ||request.body.lastName===undefined || request.body.firstName===undefined || request.body.birth_year===undefined || request.body.nationality===undefined){
+    if(request.body.length===undefined ||request.body.name===undefined || request.body.stack===undefined){
       Response.status(406).json({
         status: 406,
         message: "No se recibieron datos"
       })
 
-      }if (request.body.firstName===undefined || request.body.firstName=== ""){
+      }if (request.body.name===undefined || request.body.stack=== ""){
         
         request.body.firstName= "Anonimo"
         
 
-      }if(request.body.lastName=== undefined || request.body.lastName=== ""){
-       request.body.lastName= "Anonimo"
+      }if(request.body.name=== undefined || request.body.stack=== ""){
+       request.body.name= "Anonimo"
         }
         
       let NewAuthor = await autores.create(request.body);
@@ -64,4 +64,3 @@ module.exports = {
     getAuthors,
     createAuthor,
 };
-*/
