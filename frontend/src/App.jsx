@@ -19,11 +19,11 @@ export default function App() {
       body: JSON.stringify(form)
     });
     if (res.status === 201) {
-      setMensaje("✅ Cita creada correctamente");
+      setMensaje("Cita creada correctamente");
       setShowForm(false);
       setForm({ doctorName: "", especialidad: "", tipoConsulta: "", pacienteId: "" });
     } else {
-      setMensaje("❌ Error al crear la cita");
+      setMensaje("Error al crear la cita");
     }
   };
 

@@ -11,7 +11,7 @@ var citasRouter = require("./routes/citas");
 var app = express();
 var swaggerSetup = require("./config/swagger");
 var cors = require("cors");
-
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,7 +27,8 @@ swaggerSetup(app);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use(cors());
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
