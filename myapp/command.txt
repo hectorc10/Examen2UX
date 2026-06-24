@@ -1,0 +1,262 @@
+pnpm dlx express-generator --view=ejs
+
+
+
+
+
+
+pnpm install
+
+pnpm add sequelize sequelize-cli pg pg-hstore dotenv
+
+pnpm add -D nodemon
+pnpm add -g sequelize-cli
+
+sequelize init
+
+crear .env:
+DB_USERNAME="hectorcarranza"
+
+DB_PASSWORD="postgres"
+
+DB_NAME="notas_db"
+
+DB_HOST="localhost"
+
+DB_DIALECT="postgres"
+
+
+
+
+
+config a config.js
+models/index.js para que apunte a config.js
+
+config.js:
+require("dotenv").config()
+
+const { DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, DB_DIALECT } = process.env;
+
+
+
+module.exports = {
+
+  development: {
+
+    username: DB_USERNAME,
+
+    password: DB_PASSWORD,
+
+    database: DB_NAME,
+
+    host: DB_HOST,
+
+    dialect: DB_DIALECT,
+
+  }
+
+};
+
+
+
+sequelize model:generate --name Author --attributes name:string,stack:string
+
+sequelize model:generate --name Note --attributes title:string,content:text,priority:integer
+
+
+
+
+ this.hasMany(models.Note, { foreignKey: 'authorId' });
+
+En authors, un Author tiene muchas Notes.
+
+this.belongsTo(models.Author, { foreignKey: 'authorId' });
+
+       -En notes
+
+migration notes
+authorId: { allowNull: false, type: Sequelize.INTEGER, references: { model: 'Authors', key: 'id' } },
+
+mkdir controllers
+
+controller/Notes.js:
+const { Note, Author } = require("../models");
+
+
+
+let getNotes = async (req, res) => {
+
+  try {
+
+    let notes = await Note.findAll({
+
+      order: [['priority', 'DESC']]
+
+    });
+
+
+
+    if (notes.length <= 0) {
+
+      return res.status(204).json({ status: 204, message: "No hay notas" });
+
+    }
+
+
+
+    res.status(200).json({ status: 200, data: notes });
+
+
+
+  } catch (error) {
+
+    res.status(500).json({ status: 500, message: error.message });
+
+  }
+
+};
+
+
+
+let createNote = async (req, res) => {
+
+  try {
+
+    const { title, content, priority, authorId } = req.body;
+
+
+
+    const author = await Author.findByPk(authorId);
+
+    if (!author) {
+
+      return res.status(404).json({ status: 404, message: "Autor no encontrado" });
+
+    }
+
+
+
+    const newNote = await Note.create({ title, content, priority, authorId });
+
+
+
+    res.status(201).json({ status: 201, data: newNote });
+
+
+
+  } catch (error) {
+
+    res.status(500).json({ status: 500, message: error.message });
+
+  }
+
+};
+
+
+
+module.exports = { getNotes, createNote };
+
+
+Routes/notes.js:
+
+var routes = require("express").Router();
+
+var notesController = require("../controllers/notes.js");
+
+
+
+routes.get("/notes", notesController.getNotes);
+
+routes.post("/notes", notesController.createNote);
+
+
+
+module.exports = routes;
+
+
+
+var notesRouter = require("./routes/notes");
+app.use("/api", notesRouter);
+
+—insertar author—
+INSERT INTO "Authors" (name, stack, "createdAt", "updatedAt") VALUES ('Juan', 'MERN', NOW(), NOW());
+
+
+INSERT INTO "Authors" ("firstName","lastName","email","country","createdAt","updatedAt") VALUES ('Juan', 'Castro','juan@gmail.com','Honduras', NOW(), NOW());
+
+—crear nota raw—
+{ "title": "Mi primera nota", "content": "Contenido de prueba", "priority": 3, "authorId": 1 }
+
+
+—get Authors—
+const { Author } = require("../models");
+
+
+
+let getAuthors = async (req, res) => {
+
+  try {
+
+    let authors = await Author.findAll();
+
+
+
+    if (authors.length <= 0) {
+
+      return res.status(204).json({ status: 204, message: "No hay autores" });
+
+    }
+
+
+
+    res.status(200).json({ status: 200, data: authors });
+
+
+
+  } catch (error) {
+
+    res.status(500).json({ status: 500, message: error.message });
+
+  }
+
+};
+
+
+
+module.exports = { getAuthors };
+
+
+
+pnpm add swagger-jsdoc swagger-ui-express
+pnpm approve-builds
+
+pnpm add yamljs
+mkdir docs 
+
+mkdir docs/paths 
+
+touch docs/index.yaml 
+
+touch docs/paths/notes.yaml
+
+
+crear swagger.js
+
+% pnpm create vite frontend -- --template react
+
+cd frontend
+
+ pnpm install
+
+pnpm add -D tailwindcss @tailwindcss/vite
+
+cambiar el app.jsx
+
+cd myapp 
+
+pnpm add cors
+
+—en app.js—
+var cors = require("cors");
+
+app.use(cors());

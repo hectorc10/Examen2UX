@@ -1,0 +1,61 @@
+/api/citas:
+  get:
+    summary: Obtener todas las citas
+    tags: [Citas]
+    responses:
+      "200":
+        description: Citas obtenidas con éxito
+        content:
+          application/json:
+            example:
+              status: 200
+              data:
+                - id: 1
+                  doctorName: "Dr. Juan"
+                  especialidad: "Cardiología"
+                  tipoConsulta: "General"
+                  pacienteId: 1
+      "204":
+        description: No hay citas
+      "500":
+        description: Error del servidor
+
+  post:
+    summary: Crear una nueva cita
+    tags: [Citas]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              doctorName:
+                type: string
+                example: "Dr. Juan"
+              especialidad:
+                type: string
+                example: "Cardiología"
+              tipoConsulta:
+                type: string
+                example: "General"
+              pacienteId:
+                type: integer
+                example: 1
+    responses:
+      "201":
+        description: Cita creada con éxito
+        content:
+          application/json:
+            example:
+              status: 201
+              data:
+                id: 1
+                doctorName: "Dr. Juan"
+                especialidad: "Cardiología"
+                tipoConsulta: "General"
+                pacienteId: 1
+      "404":
+        description: Paciente no encontrado
+      "500":
+        description: Error del servidor

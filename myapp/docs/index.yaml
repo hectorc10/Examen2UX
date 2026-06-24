@@ -1,0 +1,13 @@
+openapi: 3.0.0
+info:
+  title: Sistema de Citas Clínicas
+  version: 1.0.0
+  description: API para gestionar citas médicas.
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor de desarrollo
+
+paths:
+  /api/citas:
+    $ref: './paths/citas.yaml'
